@@ -1,5 +1,11 @@
+import EditTimer from '../components/Timer/EditTimer';
+
 const Top = () => {
-  return <>トップ</>;
+  return (
+    <>
+      <EditTimer timerListSize={0} />
+    </>
+  );
 };
 
 export default Top;
