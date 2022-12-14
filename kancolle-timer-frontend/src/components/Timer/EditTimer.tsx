@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
-import { TextField, Button, Box } from '@mui/material';
+import { TextField, Button, Box, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 
 import { CreateTimerInput } from '../../API';
 
@@ -16,11 +16,11 @@ type Props = {
 };
 
 const UserEdit = ({ timerListSize }: Props) => {
-  const { register, handleSubmit } = useForm<FormInputs>({
+  const { register, handleSubmit, control } = useForm<FormInputs>({
     defaultValues: {
       time: '',
-      isTemped: false,
-      isStart: false,
+      isTemped: true,
+      isStart: true,
       name: null,
     },
   });
@@ -39,8 +39,12 @@ const UserEdit = ({ timerListSize }: Props) => {
     if (validateTime(data.time) === false) {
       return;
     }
+    // 開始しない、かつ、一時用のタイマーは、登録しない
+    if (data.isStart === false && data.isTemped === true) {
+      return;
+    }
     // endTimeの設定を、data.isStartによって定義する
-
+    // #3では対応しない
     delete data.isStart;
     const awsTime = data.time + ':00.000';
     const endTime = null;
@@ -73,10 +77,35 @@ const UserEdit = ({ timerListSize }: Props) => {
               InputLabelProps={{ shrink: true }}
               {...registerMui(
                 register('time', {
+                  required: true,
                   maxLength: 6,
                 })
               )}
             />
+            <FormGroup>
+              <Controller
+                name='isStart'
+                control={control}
+                defaultValue={true}
+                render={({ field }) => (
+                  <>
+                    <FormControlLabel {...field} label='開始' control={<Checkbox defaultChecked />} />
+                  </>
+                )}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Controller
+                name='isTemped'
+                control={control}
+                defaultValue={true}
+                render={({ field }) => (
+                  <>
+                    <FormControlLabel {...field} label='削除' control={<Checkbox defaultChecked />} />
+                  </>
+                )}
+              />
+            </FormGroup>
           </Box>
           <Button variant='contained' color='primary' type='submit'>
             Submit
