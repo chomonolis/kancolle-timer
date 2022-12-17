@@ -1,9 +1,9 @@
 import EditTimer from './EditTimer';
 import ShowTimer from './ShowTimer';
-import useTimer from '../../hook/Timer.hook';
+import useTimerIndex from './useIndexTimer';
 
 const Timer = () => {
-  const { timers } = useTimer();
+  const { timers } = useTimerIndex();
   return (
     <>
       {timers &&

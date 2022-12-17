@@ -1,13 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
-import { CreateTimerInput, Timer } from '../API';
+import { Timer } from '../../API';
 import { API, graphqlOperation } from 'aws-amplify';
-import TimerService, { TimerServiceReturnType } from '../service/timer.service';
+import useTimers from '../../hook/timer.hook';
 // amplifyで自動生成されたサブスクリプションのクエリをimport
-import { onCreateTimer, onDeleteTimer, onUpdateTimer } from '../graphql/subscriptions';
+import { onCreateTimer, onDeleteTimer, onUpdateTimer } from '../../graphql/subscriptions';
 
-const useTimer = () => {
+const useTimerIndex = () => {
   const [timers, setTimers] = useState<Timer[]>([]);
+  const { listTimers } = useTimers();
 
   const callSetTimer = async () => {
     try {
@@ -75,35 +76,7 @@ const useTimer = () => {
     })();
   }, []);
 
-  const createTimer = useCallback(async (createTimerInput: CreateTimerInput) => {
-    try {
-      const res = await TimerService.createTimer(createTimerInput);
-      return res.data?.createTimer;
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
-  }, []);
-
-  const listTimers = useCallback(async () => {
-    try {
-      const res = await TimerService.listTimers();
-      return res.data?.listTimers?.items;
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
-  }, []);
-
-  return { timers, createTimer, listTimers };
+  return { timers };
 };
 
-export type UseTimerReturnType = {
-  createTimerRT: Exclude<TimerServiceReturnType['createTimerRT']['data'], undefined>['createTimer'];
-  listTimersRT: Exclude<
-    Exclude<TimerServiceReturnType['listTimersRT']['data'], undefined>['listTimers'],
-    undefined | null
-  >['items'];
-};
-
-export default useTimer;
+export default useTimerIndex;
