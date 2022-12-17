@@ -3,14 +3,14 @@ import ShowTimer from './ShowTimer';
 import useTimer from '../../hook/Timer.hook';
 
 const Timer = () => {
-  const { timer } = useTimer();
+  const { timers } = useTimer();
   return (
     <>
-      {timer &&
-        timer.map((t) => {
+      {timers &&
+        timers.map((t) => {
           return <ShowTimer key={t.id} timer={t} />;
         })}
-      <EditTimer timerListSize={5} />
+      <EditTimer timerListSize={timers.length} />
     </>
   );
 };

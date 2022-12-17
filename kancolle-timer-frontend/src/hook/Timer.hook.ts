@@ -7,7 +7,7 @@ import TimerService, { TimerServiceReturnType } from '../service/timer.service';
 import { onCreateTimer, onDeleteTimer, onUpdateTimer } from '../graphql/subscriptions';
 
 const useTimer = () => {
-  const [timer, setTimer] = useState<Timer[]>([]);
+  const [timers, setTimers] = useState<Timer[]>([]);
 
   const callSetTimer = async () => {
     try {
@@ -19,7 +19,7 @@ const useTimer = () => {
           if (a.order > b.order) return 1;
           return 0;
         });
-        setTimer(arr);
+        setTimers(arr);
       }
     } catch (e) {
       console.error(e);
@@ -95,7 +95,7 @@ const useTimer = () => {
     }
   }, []);
 
-  return { timer, createTimer, listTimers };
+  return { timers, createTimer, listTimers };
 };
 
 export type UseTimerReturnType = {
