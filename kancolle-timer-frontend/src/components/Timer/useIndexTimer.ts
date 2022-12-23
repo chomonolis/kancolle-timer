@@ -27,18 +27,21 @@ const useTimerIndex = () => {
     }
   };
 
-  const organizeAfterDelete = useCallback(async (deletedOrder: number) => {
-    const arr = timers.filter((t) => t.order > deletedOrder);
-    try {
-      const promises = arr.map(async (t) => {
-        const nextTimer = { id: t.id, order: t.order - 1 };
-        await updateTimer(nextTimer);
-      });
-      await Promise.all(promises);
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+  const organizeAfterDelete = useCallback(
+    async (deletedOrder: number) => {
+      const arr = timers.filter((t) => t.order > deletedOrder);
+      try {
+        const promises = arr.map(async (t) => {
+          const nextTimer = { id: t.id, order: t.order - 1 };
+          await updateTimer(nextTimer);
+        });
+        await Promise.all(promises);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [timers, updateTimer]
+  );
 
   useEffect(() => {
     void callSetTimer();
