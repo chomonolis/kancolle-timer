@@ -37,7 +37,7 @@ const useShowTimer = () => {
 
   const callStopTimer = useCallback(async (timer: Timer) => {
     try {
-      const nextTimer = { ...timer, endTime: null };
+      const nextTimer = { id: timer.id, endTime: null };
       await updateTimer(nextTimer);
     } catch (e) {
       console.error(e);

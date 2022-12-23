@@ -9,7 +9,7 @@ type Props = {
 
 const ShowTimer = (props: Props) => {
   const { timer } = props;
-  const { callStartTimer } = useShowTimer();
+  const { callStartTimer, callStopTimer } = useShowTimer();
 
   const formatTime = (time: string | null | undefined) => {
     if (!time) {
@@ -22,6 +22,10 @@ const ShowTimer = (props: Props) => {
     void callStartTimer(timer);
   };
 
+  const stopTimer = () => {
+    void callStopTimer(timer);
+  };
+
   const createButton = () => {
     if (timer.endTime) {
       return (
@@ -29,7 +33,7 @@ const ShowTimer = (props: Props) => {
           variant='contained'
           color='secondary'
           onClick={() => {
-            startTimer();
+            stopTimer();
           }}
         >
           中止
