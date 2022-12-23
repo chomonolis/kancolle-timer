@@ -20,14 +20,14 @@ const ShowTimer = (props: Props) => {
 
   const formatEndTime = (endTime: string | null | undefined) => {
     if (!endTime) {
-      return '--:--';
+      return '--日 --:--';
     }
     const yyyymmdd = endTime.split('T')[0];
     const day = yyyymmdd.split('-')[2];
     const hhmmss = endTime.split('T')[1];
     const hh = hhmmss.split(':')[0];
     const mm = hhmmss.split(':')[1];
-    return `${day}日${hh}:${mm}`;
+    return `${day}日 ${hh}:${mm}`;
   };
 
   const startTimer = () => {
