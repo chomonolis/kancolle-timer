@@ -26,12 +26,9 @@ const useShowTimer = () => {
 
   const callStartTimer = async (timer: Timer) => {
     const nowTime = new Date();
-    console.log(nowTime);
     const nextTime = addTime(nowTime, timer.time);
-    console.log(nextTime);
     try {
       const nextTimer = { id: timer.id, endTime: date2AWSDateTime(nextTime) };
-      console.log(nextTimer);
       await updateTimer(nextTimer);
     } catch (e) {
       console.error(e);
