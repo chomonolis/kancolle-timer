@@ -18,6 +18,18 @@ const ShowTimer = (props: Props) => {
     return time;
   };
 
+  const formatEndTime = (endTime: string | null | undefined) => {
+    if (!endTime) {
+      return '--:--';
+    }
+    const yyyymmdd = endTime.split('T')[0];
+    const day = yyyymmdd.split('-')[2];
+    const hhmmss = endTime.split('T')[1];
+    const hh = hhmmss.split(':')[0];
+    const mm = hhmmss.split(':')[1];
+    return `${day}日${hh}:${mm}`;
+  };
+
   const startTimer = () => {
     void callStartTimer(timer);
   };
@@ -58,9 +70,9 @@ const ShowTimer = (props: Props) => {
       <Box sx={{ display: 'flex', m: 1 }}>
         <Box sx={{ flex: 1 }}>{timer.name}</Box>
         <Box sx={{ flex: 1 }}>{formatTime(timer.time)}</Box>
-        <Box sx={{ flex: 1 }}>{formatTime(timer.endTime)}</Box>
+        <Box sx={{ flex: 1 }}>{formatEndTime(timer.endTime)}</Box>
         {createButton()}
-        <IconButton aria-label='delete' sx={{ ml: 1 }}>
+        <IconButton sx={{ ml: 1 }}>
           <DeleteIcon />
         </IconButton>
       </Box>
