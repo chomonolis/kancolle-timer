@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Timer } from '../../API';
 import useShowTimer from './useShowTimer';
+import GenericDialog from '../GenericDialog';
 
 type Props = {
   timer: Timer;
@@ -9,7 +11,8 @@ type Props = {
 
 const ShowTimer = (props: Props) => {
   const { timer } = props;
-  const { callStartTimer, callStopTimer } = useShowTimer();
+  const { callStartTimer, callStopTimer, callDeleteTimer } = useShowTimer();
+  const [open, setOpen] = useState<boolean>(false);
 
   const formatTime = (time: string | null | undefined) => {
     if (!time) {
@@ -36,6 +39,10 @@ const ShowTimer = (props: Props) => {
 
   const stopTimer = () => {
     void callStopTimer(timer);
+  };
+
+  const deleteTimer = () => {
+    void callDeleteTimer(timer);
   };
 
   const createButton = () => {
@@ -65,6 +72,8 @@ const ShowTimer = (props: Props) => {
     );
   };
 
+  const deleteMsg = (timer.name ? timer.name : timer.time + 'のタイマー') + ' を削除しますか？';
+
   return (
     <>
       <Box sx={{ display: 'flex', m: 1 }}>
@@ -72,9 +81,21 @@ const ShowTimer = (props: Props) => {
         <Box sx={{ flex: 1 }}>{formatTime(timer.time)}</Box>
         <Box sx={{ flex: 1 }}>{formatEndTime(timer.endTime)}</Box>
         {createButton()}
-        <IconButton sx={{ ml: 1 }}>
+        <IconButton
+          sx={{ ml: 1 }}
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
           <DeleteIcon />
         </IconButton>
+        <GenericDialog
+          msg={deleteMsg}
+          isOpen={open}
+          doOk={deleteTimer}
+          doCancel={() => setOpen(false)}
+          irreversibleFlag
+        />
       </Box>
     </>
   );
