@@ -140,32 +140,6 @@ const useTimerIndex = () => {
     })();
 
     (() => {
-      const client = API.graphql(graphqlOperation(onDeleteTimer));
-      if ('subscribe' in client) {
-        client.subscribe({
-          next: (data) => {
-            if (isOnDeleteTimer(data)) {
-              const { onDeleteTimer: timer } = data.value.data;
-              setTimers((prev) => {
-                const newMap = new Map(prev);
-                if (timer) {
-                  newMap.delete(timer.id);
-                }
-                makeTimersArray(newMap);
-                return newMap;
-              });
-            } else {
-              console.error('data is not onDelete', data);
-            }
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
-      }
-    })();
-
-    (() => {
       const client = API.graphql(graphqlOperation(onUpdateTimer));
       if ('subscribe' in client) {
         client.subscribe({
@@ -182,6 +156,32 @@ const useTimerIndex = () => {
               });
             } else {
               console.error('data is not onUpdate', data);
+            }
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
+      }
+    })();
+
+    (() => {
+      const client = API.graphql(graphqlOperation(onDeleteTimer));
+      if ('subscribe' in client) {
+        client.subscribe({
+          next: (data) => {
+            if (isOnDeleteTimer(data)) {
+              const { onDeleteTimer: timer } = data.value.data;
+              setTimers((prev) => {
+                const newMap = new Map(prev);
+                if (timer) {
+                  newMap.delete(timer.id);
+                }
+                makeTimersArray(newMap);
+                return newMap;
+              });
+            } else {
+              console.error('data is not onDelete', data);
             }
           },
           error: (error) => {
