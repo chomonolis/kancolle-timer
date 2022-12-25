@@ -39,11 +39,7 @@ const ShowTimer = (props: Props) => {
   };
 
   const stopTimer = () => {
-    if (timer.isTemped) {
-      deleteTimer();
-    } else {
-      void callStopTimer(timer);
-    }
+    void callStopTimer(timer);
   };
 
   const deleteTimer = () => {
@@ -60,7 +56,11 @@ const ShowTimer = (props: Props) => {
           variant='contained'
           color='secondary'
           onClick={() => {
-            stopTimer();
+            if (timer.isTemped) {
+              setOpen(true);
+            } else {
+              stopTimer();
+            }
           }}
         >
           中止
