@@ -5,6 +5,69 @@ import { API, graphqlOperation } from 'aws-amplify';
 import useTimers from '../../hook/timer.hook';
 // amplifyで自動生成されたサブスクリプションのクエリをimport
 import { onCreateTimer, onDeleteTimer, onUpdateTimer } from '../../graphql/subscriptions';
+import { hasProperty } from '../../utils/typeUtils';
+
+type onUpdateTimer = {
+  value: {
+    data: {
+      onUpdateTimer: Timer;
+    };
+  };
+};
+
+type onCreateTimer = {
+  value: {
+    data: {
+      onCreateTimer: Timer;
+    };
+  };
+};
+
+type onDeleteTimer = {
+  value: {
+    data: {
+      onDeleteTimer: Timer;
+    };
+  };
+};
+
+const isOnCreateTimer = (t: unknown): t is onCreateTimer => {
+  if (hasProperty(t, 'value') && hasProperty(t.value, 'data') && hasProperty(t.value.data, 'onCreateTimer')) {
+    return isTimer(t.value.data.onCreateTimer);
+  }
+  return false;
+};
+
+const isOnUpdateTimer = (t: unknown): t is onUpdateTimer => {
+  if (hasProperty(t, 'value') && hasProperty(t.value, 'data') && hasProperty(t.value.data, 'onUpdateTimer')) {
+    return isTimer(t.value.data.onUpdateTimer);
+  }
+  return false;
+};
+
+const isOnDeleteTimer = (t: unknown): t is onDeleteTimer => {
+  if (hasProperty(t, 'value') && hasProperty(t.value, 'data') && hasProperty(t.value.data, 'onDeleteTimer')) {
+    return isTimer(t.value.data.onDeleteTimer);
+  }
+  return false;
+};
+
+const isTimer = (t: unknown): t is Timer => {
+  if (hasProperty(t, '__typename', 'id', 'time', 'isTemped', 'order', 'endTime', 'name', 'createdAt', 'updatedAt')) {
+    return (
+      t.__typename === 'Timer' &&
+      typeof t.id === 'string' &&
+      typeof t.time === 'string' &&
+      typeof t.isTemped === 'boolean' &&
+      typeof t.order === 'number' &&
+      typeof t.createdAt === 'string' &&
+      typeof t.updatedAt === 'string' &&
+      (typeof t.endTime === 'string' || t.endTime === null) &&
+      (typeof t.name === 'string' || t.name === null)
+    );
+  }
+  return false;
+};
 
 const useTimerIndex = () => {
   const [timersArray, setTimersArray] = useState<Timer[]>([]);
