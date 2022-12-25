@@ -39,7 +39,11 @@ const ShowTimer = (props: Props) => {
   };
 
   const stopTimer = () => {
-    void callStopTimer(timer);
+    if (timer.isTemped) {
+      deleteTimer();
+    } else {
+      void callStopTimer(timer);
+    }
   };
 
   const deleteTimer = () => {
