@@ -81,11 +81,12 @@ const ShowTimer = (props: Props) => {
   };
 
   const deleteMsg = (timer.name ? timer.name : timer.time + 'のタイマー') + ' を削除しますか？';
+  const timerMsg = (timer.isTemped ? 'T: ' : '') + (timer.name ? timer.name : timer.time);
 
   return (
     <>
       <Box sx={{ display: 'flex', m: 1 }}>
-        <Box sx={{ flex: 1 }}>{timer.name}</Box>
+        <Box sx={{ flex: 1 }}>{timerMsg}</Box>
         <Box sx={{ flex: 1 }}>{formatTime(timer.time)}</Box>
         <Box sx={{ flex: 1 }}>{formatEndTime(timer.endTime)}</Box>
         {createButton()}
